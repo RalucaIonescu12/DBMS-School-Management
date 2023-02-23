@@ -1,0 +1,1118 @@
+
+----------------------------------ADDRESSES-----------------------------------
+
+CREATE TABLE ADDRESSES    
+(
+ address_id NUMBER(10) CONSTRAINT PKEY_ADDRESS PRIMARY KEY,
+ street_name VARCHAR(255) CONSTRAINT nume_strada NOT NULL,
+ number_ NUMBER(10) CONSTRAINT numar_adresa NOT NULL,
+ city VARCHAR(255) CONSTRAINT nume_oras NOT NULL,
+ other_details VARCHAR(255) CONSTRAINT detalii_adresa NOT NULL
+);
+ 
+INSERT INTO ADDRESSES
+VALUES(1,'Aleea Militari', 22,'Ploiesti','Bloc 12D');
+INSERT INTO ADDRESSES
+VALUES(2,'Piata Bobalna', 23,'Ploiesti','Nr. 2');
+INSERT INTO ADDRESSES
+VALUES(3,'Brestei', 18,'Ploiesti','Bloc 7B');
+INSERT INTO ADDRESSES
+VALUES(4,'Independentei', 22,'Campina','Nr. 123');
+INSERT INTO ADDRESSES
+VALUES(5,'Cuza Voda', 101,'Ploiesti','Nr. 21');
+INSERT INTO ADDRESSES
+VALUES(6,'Alexandru Ioan Cuza', 56,'Azuga','Bloc 17A');
+INSERT INTO ADDRESSES
+VALUES(7,'Mos Ion Roata', 32,'Azuga','Nr. 14');
+INSERT INTO ADDRESSES
+VALUES(8,'Alexandru Ioan Cuza', 56,'Azuga','Nr.17');
+INSERT INTO ADDRESSES
+VALUES(9,'Alexandru Odobescu', 99,'Azuga','Bloc 17A');
+
+------------------------------SCHOOL---------------------------------------
+
+CREATE TABLE SCHOOL    
+(
+     school_id NUMBER(10) CONSTRAINT PKEY_SCHOOL PRIMARY KEY,
+     school_name VARCHAR(255) CONSTRAINT nume_scoala NOT NULL,
+     principal_id NUMBER(11) CONSTRAINT id_director NOT NULL,
+     school_desc VARCHAR(255) CONSTRAINT descriere_scoala NOT NULL,
+     address_id NUMBER(10),
+     CONSTRAINT fk_address_school FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id) 
+);
+select * from SCHOOL;
+
+INSERT INTO SCHOOL
+VALUES(11,'Sfanta Vineri', 43,'Clase speciale de matematica si informatica',5);
+INSERT INTO SCHOOL
+VALUES(12,'Sfanta Maria', 42,'Clase speciale de matematica si informatica',7);
+INSERT INTO SCHOOL
+VALUES(13,'Sfanta Ana', 41,'Clase speciale de informatica si engleza',4);
+INSERT INTO SCHOOL
+VALUES(14,'Sfanta Vasile', 44,'Clase speciale de germana si engleza',2);
+INSERT INTO SCHOOL
+VALUES(15,'Sfantul Gheorghe', 45,'Clase speciale de informatica si engleza',8) ;
+
+update school
+set principal_id=33
+where school_name='Sfanta Vineri';
+
+update school
+set principal_id=34
+where school_name='Sfanta Maria';
+
+update school
+set principal_id=35
+where school_name='Sfanta Ana';
+
+update school
+set principal_id=37
+where school_name='Sfantu Gheorghe';
+
+update school
+set school_name='Sfantu Gheorghe'
+where school_id=15;
+
+update school
+set principal_id=36
+where school_name='Sfanta Vasile';
+---------------------------------STUDENT-------------------------------------
+CREATE TABLE STUDENT  
+(student_id  NUMBER(10) CONSTRAINT PKEY_STUDENT PRIMARY KEY,
+ address_id NUMBER(10),
+ school_id NUMBER(10),
+last_name VARCHAR(255) CONSTRAINT prenume_elev NOT NULL,
+first_name VARCHAR(255) CONSTRAINT nume_elev NOT NULL,
+ sex VARCHAR(255) CONSTRAINT sex_elev NOT NULL,
+ age NUMBER(2) CONSTRAINT varsta_elev NOT NULL,
+ email VARCHAR(255) UNIQUE,
+ student_email VARCHAR(255) UNIQUE,
+ student_pass VARCHAR(255) UNIQUE,
+ phone_number1 NUMBER(11) UNIQUE,
+ school_year NUMBER(2) CONSTRAINT an_scolar_elev NOT NULL,
+ CONSTRAINT fk_address_student FOREIGN KEY(address_id) references ADDRESSES(address_id),
+ CONSTRAINT fk_school_student FOREIGN KEY(school_id) references SCHOOL(school_id)
+);
+select * from STUDENT;
+INSERT INTO STUDENT
+VALUES(21,1,11,'Ionescu','Raluca','feminin',13,'ionescu_raluca@yahoo.com','raluca-ionescu@sv.ro','9374891',0722222222,7);
+INSERT INTO STUDENT
+VALUES(22,1,11,'Ionescu','Matei','masculin',12,'ionescu_matei@yahoo.com','matei-ionescu@sv.ro','9325891',0733333333,6);
+INSERT INTO STUDENT
+VALUES(23,4,13,'Popescu','Alex','masculin',10,'alex_popescu@yahoo.com','alex-popescu@sa.ro','9374521511',0744444444,4);
+INSERT INTO STUDENT
+VALUES(24,6,15,'Iancu','Andreea','feminin',11,'iancu_andreea@yahoo.com','andreea-iancu@sv.ro','934713591',0755555555,5);
+INSERT INTO STUDENT
+VALUES(25,3,14,'Gaias','Delia','feminin',14,'gaias_delia@yahoo.com','delia-gaias@sv.ro','93747891',0766666666,8);
+INSERT INTO STUDENT
+VALUES(26,9,15,'Anghel','Andreea','feminin',11,'anghel_andreea@yahoo.com','andreea-anghel@sv.ro','9347130091',0755575555,5);
+
+
+----------------------------EMPLOYEE-----------------------------------------
+CREATE TABLE EMPLOYEE 
+(
+ employee_id NUMBER(11) CONSTRAINT PKEY_EMPLOYEE PRIMARY KEY,
+ school_id NUMBER(10),
+ CONSTRAINT fk_school_employee FOREIGN KEY(school_id) references SCHOOL(school_id),
+ first_name VARCHAR(40) CONSTRAINT prenume_angajat NOT NULL,
+ last_name VARCHAR(40) CONSTRAINT nume_angajat NOT NULL,
+ sex VARCHAR(10) CONSTRAINT sex_angajat NOT NULL
+ );
+ select * from EMPLOYEE;
+
+ --profi
+update EMPLOYEE
+set salary=4600
+where employee_id=31;
+ALTER TABLE EMPLOYEE
+ADD (salary NUMBER(10) DEFAULT 4600);
+ALTER TABLE EMPLOYEE
+ADD CONSTRAINT salariu_angajat NOT NULL (salary) ;
+
+update employee
+set salary=salary+20/100*salary
+where employee_id=34 or employee_id=38 or employee_id=42
+or employee_id=41 or employee_id=52 
+or employee_id=48 or employee_id=39 
+or employee_id=49 or employee_id=51;
+
+INSERT INTO EMPLOYEE
+VALUES(31,11,'Simache','Catalin','masculin');
+INSERT INTO EMPLOYEE
+VALUES(32,11,'Cristea','Daniel','masculin');
+INSERT INTO EMPLOYEE
+VALUES(33,11,'Mocanu','Alexandru','masculin');
+INSERT INTO EMPLOYEE
+VALUES(34,12,'Radu','Andrei','masculin'); 
+INSERT INTO EMPLOYEE
+VALUES(35,13,'Manole','Ioana','feminin');
+INSERT INTO EMPLOYEE
+VALUES(36,14,'Ciobanu','Diana','feminin');
+INSERT INTO EMPLOYEE
+VALUES(37,15,'Stanescu','Delia','feminin');
+INSERT INTO EMPLOYEE
+VALUES(38,11,'Radu','Bianca','feminin');
+INSERT INTO EMPLOYEE
+VALUES(39,12,'Borindel','Alina','feminin');
+INSERT INTO EMPLOYEE
+VALUES(40,13,'Gheorghe','Matei','feminin');
+
+--alti angajati----
+INSERT INTO EMPLOYEE
+VALUES(41,11,'Anghel','Ana','feminin');
+INSERT INTO EMPLOYEE
+VALUES(42,12,'Poposcu','Briana','feminin');
+INSERT INTO EMPLOYEE
+VALUES(43,13,'Iordache','Bogdan','masculin');
+INSERT INTO EMPLOYEE
+VALUES(44,14,'Manolache','George','masculin');
+INSERT INTO EMPLOYEE
+VALUES(45,12,'Ionescu','Maria','feminin');
+INSERT INTO EMPLOYEE
+VALUES(46,15,'Iordache','Mihaela','feminin');
+INSERT INTO EMPLOYEE
+VALUES(47,14,'Catargiu','Costel','masculin');
+INSERT INTO EMPLOYEE
+VALUES(48,13,'Suciu','Ana','feminin');
+INSERT INTO EMPLOYEE
+VALUES(49,12,'Ganea','Artur','masculin');
+INSERT INTO EMPLOYEE
+VALUES(50,11,'Mocanu','Sandu','masculin');
+INSERT INTO EMPLOYEE
+VALUES(51,14,'Barbu','Dimitrie','masculin');
+INSERT INTO EMPLOYEE
+VALUES(52,13,'Gheorghiu','Antonio','masculin');
+INSERT INTO EMPLOYEE
+VALUES(53,12,'Poenaru','Antonio','masculin');
+INSERT INTO EMPLOYEE
+VALUES(54,11,'Filotti','Flaviu','masculin');
+INSERT INTO EMPLOYEE
+VALUES(55,15,'Mitu','Ion','masculin');
+INSERT INTO EMPLOYEE
+VALUES(56,15,'Manolache','Ionut','masculin',4600);
+INSERT INTO EMPLOYEE
+VALUES(57,15,'Manole','Ioana','feminin',4600);
+INSERT INTO EMPLOYEE
+VALUES(58,14,'Ciobanu','Diana','feminin',4600);
+INSERT INTO EMPLOYEE
+VALUES(59,15,'Mocanu','Alex','masculin',4600);
+INSERT INTO EMPLOYEE
+VALUES(60,15,'Mocanu','Alex','masculin',4600);
+INSERT INTO EMPLOYEE
+VALUES(61,15,'Radu','Andrei','masculin',4600);
+INSERT INTO EMPLOYEE
+VALUES(62,13,'Simache','Catalin','masculin',4600);
+INSERT INTO EMPLOYEE
+VALUES(65,13,'Toma','Adrian','masculin',4600);
+INSERT INTO EMPLOYEE
+VALUES(63,10,'Andrei','Simona','feminin',4600);
+INSERT INTO EMPLOYEE
+VALUES(64,13,'Toma','Cristian','masculin',4600);
+----------------------OTHEREMPLOYEES--------------------------------------------------
+
+CREATE TABLE OTHEREMPLOYEES 
+(
+ other_employee_id NUMBER(10) CONSTRAINT PKEY_OTHEREMPLOYEE PRIMARY KEY,
+ employee_id NUMBER(10),
+ CONSTRAINT fk_otheremployee  FOREIGN KEY(employee_id) references EMPLOYEE(employee_id),
+ job_name VARCHAR(40) CONSTRAINT nume_alt_angajat NOT NULL,
+ job_description VARCHAR(255) NOT NULL
+ );
+
+select * from OTHEREMPLOYEES;
+INSERT INTO OTHEREMPLOYEES
+VALUES(501,41,'Janitor','Responsabil pentru cladirea nordica');
+INSERT INTO OTHEREMPLOYEES
+VALUES(502,42,'Janitor','Responsabil pentru cladirea nordica');
+INSERT INTO OTHEREMPLOYEES
+VALUES(503,43,'Janitor','Responsabil pentru cladirea sudica');
+INSERT INTO OTHEREMPLOYEES
+VALUES(504,44,'Janitor','Responsabil pentru cladirea sudica');
+INSERT INTO OTHEREMPLOYEES
+VALUES(505,46,'Nurse','Asistenta medicala la cabinetul stomatologic.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(506,45,'Nurse','Asistenta medicala la cabinetul medical.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(507,47,'Nurse','Asistenta medicala la cabinetul medical.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(508,48,'Nurse','Asistenta medicala la cabinetul stomatologic.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(509,49,'Guardian','Gardian la poarta de la aripa sudica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(510,50,'Guardian','Gardian la poarta de la aripa nordica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(511,51,'Secretary','Angajat part-time.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(512,52,'Mechanic','Angajat part-time.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(513,53,'Mechanic','Responsabil cladirea sudica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(514,54,'Mechanic','Angajata part-time.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(515,55,'Secretary','Responsabil cladirea sudica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(516,56,'Janitor','Responsabil pentru cladirea nordica');
+INSERT INTO OTHEREMPLOYEES
+VALUES(517,57,'Secretary','Responsabil cladirea sudica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(518,58,'Secretary','Responsabil cladirea sudica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(519,59,'Secretary','Responsabil cladirea sudica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(520,60,'Nurse','Asistenta medicala la cabinetul medical.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(521,61,'Mechanic','Angajata part-time.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(522,62,'Mechanic','Angajata part-time.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(523,63,'Guardian','Gardian la poarta de la aripa sudica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(524,64,'Guardian','Gardian la poarta de la aripa estica.');
+INSERT INTO OTHEREMPLOYEES
+VALUES(525,65,'Guardian','Gardian la poarta de la aripa vestica.');
+
+----------------------JANITOR--------------------------------------------------
+create table JANITOR
+(
+janitor_id NUMBER(10) constraint PKEY_JANTOR PRIMARY KEY,
+other_employee_id NUMBER(10),
+CONSTRAINT fk_janitor_employee FOREIGN KEY(other_employee_id) references OTHEREMPLOYEES(other_employee_id)
+);
+
+select * from JANITOR;
+INSERT INTO JANITOR
+VALUES(601,501);
+INSERT INTO JANITOR
+VALUES(602,502);
+INSERT INTO JANITOR
+VALUES(603,503);
+INSERT INTO JANITOR
+VALUES(604,504);
+INSERT INTO JANITOR
+VALUES(6605,516);
+
+----------------------SECRETARY--------------------------------------------------
+create table SECRETARY
+(
+secretary_id NUMBER(10) constraint PKEY_SECRETARY PRIMARY KEY,
+other_employee_id NUMBER(10),
+CONSTRAINT fk_secretary FOREIGN KEY(other_employee_id) references OTHEREMPLOYEES(other_employee_id)
+);
+
+select * from SECRETARY;
+INSERT INTO SECRETARY
+VALUES(605,511);
+INSERT INTO SECRETARY
+VALUES(604,515);
+INSERT INTO SECRETARY
+VALUES(605,517);
+INSERT INTO SECRETARY
+VALUES(606,518);
+INSERT INTO SECRETARY
+VALUES(608,519);
+
+
+-------------------------NURSE--------------------------------------------------
+
+create table NURSE
+(
+nurse_id NUMBER(10) constraint PKEY_NURSE PRIMARY KEY,
+other_employee_id NUMBER(10),
+CONSTRAINT fk_nurse FOREIGN KEY(other_employee_id) references OTHEREMPLOYEES(other_employee_id)
+); 
+
+select * from NURSE;
+INSERT INTO NURSE
+VALUES(604,505);
+INSERT INTO NURSE
+VALUES(605,506);
+INSERT INTO NURSE
+VALUES(606,507);
+INSERT INTO NURSE
+VALUES(609,508);
+INSERT INTO NURSE
+VALUES(610,520);
+
+
+----------------------MECHANIC--------------------------------------------------
+
+create table MECHANIC
+(
+mechanic_id NUMBER(10) constraint PKEY_MECHANIC PRIMARY KEY,
+other_employee_id NUMBER(10),
+CONSTRAINT fk_mechanic FOREIGN KEY(other_employee_id) 
+references OTHEREMPLOYEES(other_employee_id)
+);
+select * from MECHANIC;
+INSERT INTO MECHANIC
+VALUES(610,512);
+INSERT INTO MECHANIC
+VALUES(611,513);
+INSERT INTO MECHANIC
+VALUES(612,514);
+INSERT INTO MECHANIC
+VALUES(613,520);
+INSERT INTO MECHANIC
+VALUES(614,521);
+
+----------------------GUARDIAN----------------------------------------------
+create table GUARDIAN
+(
+guardian_id NUMBER(10) constraint PKEY_GUARDIAN PRIMARY KEY,
+other_employee_id NUMBER(10),
+CONSTRAINT fk_guardian FOREIGN KEY(other_employee_id)
+references OTHEREMPLOYEES(other_employee_id)
+);
+
+select * from GUARDIAN;
+
+INSERT INTO GUARDIAN
+VALUES(613,509);
+INSERT INTO GUARDIAN
+VALUES(610,510);
+INSERT INTO GUARDIAN
+VALUES(614,523);
+INSERT INTO GUARDIAN
+VALUES(615,524);
+INSERT INTO GUARDIAN
+VALUES(617,525);
+
+----------------------TEACHERS--------------------------------------------------
+CREATE TABLE TEACHERS
+(
+teacher_id NUMBER(11) CONSTRAINT PKEY_TEACHER PRIMARY KEY,
+employee_id NUMBER(10),
+CONSTRAINT fk_teacher_employee FOREIGN KEY(employee_id)
+references EMPLOYEE(employee_id)
+);
+
+select * from TEACHERS;
+INSERT INTO TEACHERS
+VALUES(61,31);
+INSERT INTO TEACHERS
+VALUES(62,32);
+INSERT INTO TEACHERS
+VALUES(63,33);
+INSERT INTO TEACHERS
+VALUES(64,34);
+INSERT INTO TEACHERS
+VALUES(65,35);
+INSERT INTO TEACHERS
+VALUES(66,36);
+INSERT INTO TEACHERS
+VALUES(67,37);
+INSERT INTO TEACHERS
+VALUES(68,38);
+INSERT INTO TEACHERS
+VALUES(69,39);
+INSERT INTO TEACHERS
+VALUES(70,40);
+
+
+----------------------CLASSROOM--------------------------------------------------
+
+CREATE TABLE CLASSROOM
+(
+ classroom_id NUMBER(10) CONSTRAINT PKEY_CLASSROOM PRIMARY KEY,
+ capacityy NUMBER(3) CONSTRAINT capacitate_sala NOT NULL,
+ classroom_type VARCHAR(25) CONSTRAINT tip_sala NOT NULL,
+ facilitati VARCHAR(255) CONSTRAINT facilitati_sala NOT NULL
+ );
+select * from CLASSROOM;
+INSERT INTO CLASSROOM
+VALUES(80,30,'laborator','ustensile, videoproiector, whiteboard');
+INSERT INTO CLASSROOM
+VALUES(81,25,'laborator','videoproiector');
+INSERT INTO CLASSROOM
+VALUES(82,60,'amfiteatru','videoproiector, whiteboard');
+INSERT INTO CLASSROOM
+VALUES(83,30,'sala de clasa','whiteboard');
+INSERT INTO CLASSROOM
+VALUES(84,90,'sala de festivitati','videoproiector, whiteboard');
+INSERT INTO CLASSROOM
+VALUES(85,30,'Laborator de chimie','ustensile, whiteboard');
+
+
+----------------------COURSE--------------------------------------------------
+
+
+CREATE SEQUENCE SEQ_COURSE
+INCREMENT by 1
+START WITH 101
+MAXVALUE 10000
+NOCYCLE;
+
+CREATE TABLE COURSE
+(
+ course_id NUMBER(11) CONSTRAINT PKEY_COURSE PRIMARY KEY,
+ classroom_id NUMBER(10),
+ CONSTRAINT fk_course_classrooms FOREIGN KEY(classroom_id) 
+ references CLASSROOM(classroom_id),
+ course_name VARCHAR(30) CONSTRAINT nume_materie NOT NULL,
+ 
+ course_desc VARCHAR(255) CONSTRAINT descriere_curs NOT NULL
+ );
+
+select * from COURSE;
+INSERT INTO COURSE
+VALUES(SEQ_COURSE.NEXTVAL,83,'Matematica','Algebra');
+INSERT INTO COURSE
+VALUES(SEQ_COURSE.NEXTVAL,83,'Limba si literatura romana','Gramatica');
+INSERT INTO COURSE
+VALUES(SEQ_COURSE.NEXTVAL,82,'Engleza','Gramatica si Informal/Formal Letters');
+INSERT INTO COURSE
+VALUES(SEQ_COURSE.NEXTVAL,85,'Chimie','Chimie organica si anorganica');
+INSERT INTO COURSE
+VALUES(SEQ_COURSE.NEXTVAL,84,'Biologie','Chimie organica si anorganica');
+INSERT INTO COURSE
+VALUES(SEQ_COURSE.NEXTVAL,80,'Istorie','Istoria Romaniei');
+select * from course;
+
+----------------------MARKS--------------------------------------------------
+CREATE TABLE MARKS
+(
+ mark_id NUMBER(10) CONSTRAINT PKEY_MARK PRIMARY KEY,
+ date_ DATE CONSTRAINT data_obtinere_nota NOT NULL,
+ mark_ NUMBER(2) CONSTRAINT nota_materie NOT NULL
+ );
+
+ select * from MARKS;
+INSERT INTO MARKS
+VALUES (111,TO_DATE('02-08-2021','DD-MM-YYYY'), 10);
+
+INSERT INTO MARKS
+VALUES (112,TO_DATE('02-09-2021','DD-MM-YYYY'), 9);
+ 
+INSERT INTO MARKS
+VALUES (113,TO_DATE('12-11-2021','DD-MM-YYYY'), 7);
+
+INSERT INTO MARKS
+VALUES (114,TO_DATE('02-07-2021','DD-MM-YYYY'), 9);
+
+INSERT INTO MARKS
+VALUES (115,TO_DATE('23-09-2021','DD-MM-YYYY'), 10);
+
+INSERT INTO MARKS
+VALUES (116,TO_DATE('12-06-2021','DD-MM-YYYY'), 8);
+
+INSERT INTO MARKS
+VALUES (117,TO_DATE('14-11-2021','DD-MM-YYYY'), 5);
+
+INSERT INTO MARKS
+VALUES (118,TO_DATE('17-06-2021','DD-MM-YYYY'), 10);
+
+INSERT INTO MARKS
+VALUES (119,TO_DATE('18-01-2021','DD-MM-YYYY'), 5);
+
+INSERT INTO MARKS
+VALUES (120,TO_DATE('19-02-2021','DD-MM-YYYY'), 4);
+
+INSERT INTO MARKS
+VALUES (120,TO_DATE('19-02-2021','DD-MM-YYYY'), 4);
+
+INSERT INTO MARKS
+VALUES (121,TO_DATE('19-02-2021','DD-MM-YYYY'), 8);
+
+----------------------PARENTS-------------------------------------------------
+CREATE TABLE PARENTS
+(
+ parent_id NUMBER(10) CONSTRAINT PKEY_PARENT PRIMARY KEY,
+ address_id NUMBER(10),
+ first_name VARCHAR(40) CONSTRAINT prenume_parinte NOT NULL,
+ last_name VARCHAR(40) CONSTRAINT nume_parinte NOT NULL,
+ sex VARCHAR(10) CONSTRAINT sex_parinte NOT NULL,
+ email_ VARCHAR(40) UNIQUE,
+ phone_number NUMBER(10) UNIQUE,
+CONSTRAINT fk_address_parent FOREIGN KEY(address_id)
+references ADDRESSES(address_id)
+ );
+ select * from PARENTS;
+
+ INSERT INTO PARENTS
+VALUES(131,3,'Gaias','Natalia','feminin','gaias_natalia@yahoo.com',0777777777);
+ 
+ INSERT INTO PARENTS
+VALUES(132,3,'Gaias','Marian','masculin','gaias_marian@yahoo.com',0788888888);
+
+INSERT INTO PARENTS
+VALUES(133,1,'Ionescu','Georgiana','feminin','ionescu_georgiana@yahoo.com',0799999999);
+
+INSERT INTO PARENTS
+VALUES(137,1,'Ionescu','Alex','masculin','ionescu_alex@yahoo.com',0799922999);
+
+INSERT INTO PARENTS
+VALUES(134,6,'Iancu','Diana','feminin','iancu_diana@yahoo.com',0777774444);
+
+ INSERT INTO PARENTS
+VALUES(138,6,'Iancu','Serban','masculin','iancu_serbanyahoo.com',0771177777);
+ INSERT INTO PARENTS
+VALUES(135,4,'Popescu','Elena','feminin','popescu_elena@yahoo.com',0709997777); 
+ INSERT INTO PARENTS
+VALUES(136,4,'Popescu','Andrei','masculin','popescu_andrei@yahoo.com',0711117777);
+ 
+  INSERT INTO PARENTS
+VALUES(140,4,'Anghel','Sorina','feminin','anghel_sorina@yahoo.com',0709948777); 
+ INSERT INTO PARENTS
+VALUES(139,9,'Anghel','Andrei','masculin','anghel_andrei@yahoo.com',07432117777);
+ 
+----------------------MAMA-------------------------------------------------- 
+create table MAMA
+(
+mama_id NUMBER(10) constraint PKEY_MAMA PRIMARY KEY,
+parent_id NUMBER(10),
+CONSTRAINT fk_mama_parent FOREIGN KEY(parent_id)
+references PARENTS(parent_id)
+);
+
+select * from MAMA;
+
+insert into MAMA
+values(141,131);
+
+insert into MAMA
+values(142,133);
+
+insert into MAMA
+values(143,134);
+
+insert into MAMA
+values(144,135);
+
+insert into MAMA
+values(145,137);
+
+delete from tata;
+create table TATA
+(
+tata_id NUMBER(10) constraint PKEY_TATA PRIMARY KEY,
+parent_id NUMBER(10),
+CONSTRAINT fk_tata_parent FOREIGN KEY(parent_id) 
+references PARENTS(parent_id)
+);
+
+select * from TATA;
+insert into TATA
+values(151,132);
+
+insert into TATA
+values(152,137);
+
+insert into TATA
+values(153,138);
+
+insert into TATA
+values(154,136);
+
+insert into TATA
+values(155,139);
+
+----------------------CATALOG--------------------------------------------------
+CREATE TABLE CATALOG
+(student_id NUMBER(10) CONSTRAINT pk_st_catalog REFERENCES STUDENT(student_id),
+mark_id  NUMBER(10) CONSTRAINT pk_ma_catalog REFERENCES MARKS(mark_id),
+course_id NUMBER(11) CONSTRAINT pk_co_catalog REFERENCES COURSE(course_id),
+CONSTRAINT pk_catalog primary key(student_id,mark_id,course_id)
+);
+select * from catalog;
+select * from marks;
+select * from marks;
+select * from course;
+insert into CATALOG
+values(21,111,161);
+
+insert into CATALOG
+values(22,112,162);
+
+insert into CATALOG
+values(23,113,163);
+select * from course;
+
+insert into CATALOG
+values(24,114,164);
+
+insert into CATALOG
+values(24,115,161);
+
+insert into CATALOG
+values(25,115,165);
+
+insert into CATALOG
+values(25,116,166);
+
+insert into CATALOG
+values(24,121,166);
+
+insert into CATALOG
+values(23,118,162);
+
+insert into CATALOG
+values(22,119,163);
+
+insert into CATALOG
+values(21,120,161);
+------------------ELEVI_PARINTI-----------------------------------
+CREATE TABLE ELEVI_PARINTI
+(student_id NUMBER(10) CONSTRAINT pk_st_e_p REFERENCES STUDENT(student_id),
+parent_id  NUMBER(10) CONSTRAINT pk_pa_e_p REFERENCES PARENTS(parent_id),
+number_of_family_members NUMBER(10) CONSTRAINT nb_of_members NOT NULL,
+CONSTRAINT pk_elevi_parinti primary key(student_id,parent_id)
+);
+
+select * from elevi_parinti;
+insert into ELEVI_PARINTI
+values(25,131,3);
+
+insert into ELEVI_PARINTI
+values(25,132,3);
+
+insert into ELEVI_PARINTI
+values(21,137,4);
+
+insert into ELEVI_PARINTI
+values(21,133,4);
+
+insert into ELEVI_PARINTI
+values(22,137,4);
+
+insert into ELEVI_PARINTI
+values(22,133,4);
+
+insert into ELEVI_PARINTI
+values(23,135,3);
+
+insert into ELEVI_PARINTI
+values(23,136,3);
+
+insert into ELEVI_PARINTI
+values(24,138,3);
+
+insert into ELEVI_PARINTI
+values(24,134,3);
+
+------------------PREDA-----------------------------------
+CREATE TABLE PREDA
+(teacher_id NUMBER(10) CONSTRAINT pk_p_t REFERENCES TEACHERS(teacher_id),
+course_id  NUMBER(10) CONSTRAINT pk_p_c REFERENCES COURSE(course_id),
+CONSTRAINT pk_preda primary key(teacher_id,course_id)
+);
+select * from PREDA;
+select * from course;
+insert into PREDA
+values(61,161);
+
+insert into PREDA
+values(62,162);
+
+insert into PREDA
+values(63,163);
+
+insert into PREDA
+values(64,164);
+
+insert into PREDA
+values(65,165);
+
+insert into PREDA
+values(66,166);
+
+insert into PREDA
+values(67,161);
+
+insert into PREDA
+values(68,162);
+
+insert into PREDA
+values(69,163);
+
+insert into PREDA
+values(70,161);
+
+insert into PREDA
+values(70,162);
+
+insert into PREDA
+values(70,163);
+
+insert into PREDA
+values(70,164);
+
+insert into PREDA
+values(70,165);
+
+insert into PREDA
+values(70,166);
+
+insert into PREDA
+values(68,161);
+insert into PREDA
+values(68,163);
+insert into PREDA
+values(68,164);
+insert into PREDA
+values(68,165);
+insert into PREDA
+values(68,166);
+
+SET SERVEROUTPUT ON;
+
+--6. Formulati în limbaj natural o problemă pe care să o rezolvati folosind un subprogram stocat
+--independent care să utilizeze două tipuri diferite de colectii studiate. Apelati subprogramul.
+
+--Pentru fiecare student, afisati notele pentru fiecare curs,
+--iar daca nu are nicio nota se va afisa mesajul : "Studentul _ nu are note la _".
+
+create or replace procedure EX6 
+as
+        type tabel_cursuri is table of course.course_name%type index by binary_integer;  --tablou indexat
+        type tabel_studenti is table of student%rowtype; --tablou imbricat
+        type tabel_note is table of marks.mark_%type index by binary_integer;
+        cursuri tabel_cursuri;
+        note tabel_note;
+        studenti tabel_studenti:=tabel_studenti();
+        numar NUMBER:=0;
+
+BEGIN
+        select course_name 
+        bulk collect into cursuri
+        from course ;
+        
+        select * 
+        bulk collect into studenti
+        from student;
+        
+        FOR i IN studenti.FIRST..studenti.LAST LOOP
+                numar:=0;
+                for j in cursuri.first..cursuri.last loop
+                        select count(*) into numar
+                        from course co ,catalog c, student s,marks m 
+                        where s.student_id=c.student_id and m.mark_id=c.mark_id
+                        and co.course_id=c.course_id 
+                        and s.student_id=studenti(i).student_id and co.course_name=cursuri(j); 
+                        
+                        if numar=0 then DBMS_OUTPUT.PUT_LINE('Studentul:  '||studenti(i).first_name || ' ' || studenti(i).last_name|| ' nu are note la  '||cursuri(j));
+                        end if;
+                        
+                        if numar>0 then 
+                         DBMS_OUTPUT.PUT('Studentul:  '||studenti(i).first_name || '  ' || studenti(i).last_name|| ' are la  '||cursuri(j) || ' notele: ');
+                        
+                        select m.mark_  bulk collect into note
+                        from course co ,catalog c, student s,marks m 
+                        where s.student_id=c.student_id and m.mark_id=c.mark_id
+                        and co.course_id=c.course_id 
+                        and s.student_id=studenti(i).student_id and co.course_name=cursuri(j);
+                        for k in note.first..note.last loop
+                                dbms_output.put(note(k)|| '  ');
+                        end loop;
+                        DBMS_OUTPUT.NEW_LINE();
+                        end if;
+                end loop;
+        DBMS_OUTPUT.PUT_LINE('--------------------------');
+        END LOOP;
+end ;
+/
+BEGIN
+    Ex6;
+END;
+/
+set serveroutput on;
+select * from student;
+
+--7. Formulati în limbaj natural o problemă pe care să o rezolvati folosind un subprogram stocat
+--independent care să utilizeze 2 tipuri diferite de cursoare studiate, unul dintre acestea fiind cursor
+--parametrizat. Apelati subprogramul.
+
+--pentru scolile cu o descriere data, sa se mareasca
+--salariile angajatilor care nu sunt profesori cu 200
+
+create or replace procedure EX7
+as
+            --cursor parametrizat
+            Cursor scoli(descc school.school_desc%type) is
+                            select school_id
+                            from school
+                            where school_desc=descc;
+            
+           CURSOR c IS   
+                select employee_id 
+                from otheremployees;
+            
+            id_scoala school.school_id%type;
+            id_  employee.employee_id%type;
+begin
+            open scoli('Clase speciale de matematica si informatica');
+            loop
+                fetch scoli into id_scoala;
+                exit when scoli%notfound;
+                open c;
+                 LOOP
+                        fetch c into id_;
+                        exit when c%notfound;
+                        UPDATE employee
+                        SET salary = salary +200
+                        where employee_id=id_ and school_id=id_scoala;
+                   END LOOP; 
+                   close c;
+            end loop;
+            close scoli;
+end;
+/
+
+BEGIN
+    EX7;
+END;
+/
+
+--8. Formulati în limbaj natural o problemă pe care să o rezolvati folosind un subprogram stocat
+--independent de tip functie care să utilizeze într-o singură comandă SQL 3 dintre tabelele definite.
+--Definiti minim 2 exceptii. Apelati subprogramul astfel încât să evidentiati toate cazurile tratate.
+
+update employee
+set last_name='Alina'
+where employee_id=37 or employee_id=36;
+
+--Pentru un profesor al carui prenume este dat, sa se afiseze numarul 
+--de cursuri pe care le desfasoara intr-o sala care este laborator.
+--profesori mai multi cu acelasi prenume->exceptie
+--nu exista cursuri->exceptie
+
+create or replace function ex8(nume employee.last_name%type) return NUMBER is rezultat number;
+            numar NUMBER:=0;
+            id_prof  teachers.teacher_id%type;
+            NO_TEACHER exception;
+            MORE_THAN_ONE_TEACHER exception;
+begin
+            select count(t.teacher_id) into numar
+            from employee e ,  teachers t
+            where e.last_name=nume and e.employee_id=t.employee_id;
+            
+            if numar=0  then 
+                    raise NO_TEACHER;
+            end if;
+            if numar>1 then 
+                    raise MORE_THAN_ONE_TEACHER;
+            end if;
+            
+            select t.teacher_id into id_prof
+            from employee e ,  teachers t
+            where e.last_name=nume and e.employee_id=t.employee_id;
+            
+            select count(*) into rezultat
+            from preda p, course c, classroom cl
+            where lower(cl.classroom_type) like '%laborator%'
+            and p.teacher_id=id_prof and c.course_id=p.course_id 
+            and c.classroom_id=cl.classroom_id;
+            
+            return rezultat;
+            EXCEPTION 
+            WHEN NO_TEACHER then 
+                    DBMS_OUTPUT.PUT_LINE('Nu exista acest profesor!');
+                    return -1;
+            WHEN MORE_THAN_ONE_TEACHER THEN
+                    DBMS_OUTPUT.PUT_LINE('Mai multi profesori cu acest nume!');
+                    return -1;
+end;
+/
+
+DECLARE 
+    numar_corect NUMBER;
+BEGIN
+    numar_corect := Ex8('Bianca'); --are 2 cursuri
+    DBMS_OUTPUT.PUT_LINE('Profesorul cu prenumele Bianca tine ' || numar_corect||' cursuri in  laboratoare.' );
+END;
+/
+declare
+    numar_nu_exista NUMBER;
+begin
+    DBMS_OUTPUT.PUT_LINE('Exceptia NO_TEACHERS');
+    numar_nu_exista :=ex8('xxxxx'); --nu exista
+end;
+/
+
+declare
+        numar_mai_multi NUMBER;
+begin
+    DBMS_OUTPUT.PUT_LINE('Exceptia MORE_THAN_ONE_TEACHER');
+    numar_mai_multi := Ex8('Alina');--mai multi cu numele asta
+end;
+/
+
+declare
+    numar_zero NUMBER;
+begin
+   numar_zero := Ex8('Alexandru'); -- nu are astfel de cursuri
+    DBMS_OUTPUT.PUT_LINE('Profesor Alexandru tine '|| numar_zero ||' cursuri in laboratoare(fara exceptie) ');
+end;
+/
+
+--9. Formulati în limbaj natural o problemă pe care să o rezolvati folosind un subprogram stocat
+--independent de tip procedură care să utilizeze într-o singură comandă SQL 5 dintre tabelele
+--definite. Tratati toate exceptiile care pot apărea, incluzând exceptiile NO_DATA_FOUND ti
+--TOO_MANY_ROWS. Apelati subprogramul astfel încât să evidentiati toate cazurile tratate.
+
+select s.last_name,co.course_name, max(m.mark_)
+        from student s, catalog ca, marks m, course co, classroom cl
+        where s.student_id=ca.student_id 
+        and m.mark_id=ca.mark_id 
+        and co.course_id=ca.course_id 
+        and cl.classroom_id=co.classroom_id and cl.classroom_type like '%clasa'
+        group by s.last_name,co.course_name;
+
+
+--sa se afiseze pentru un student al carui nume de familie este dat,
+--nota cea mai mare la fiecare curs la care participa si care are loc intr-o sala de clasa, 
+--exceptii->mai multi copii cu acelasi nume
+--               ->nu exista copilul/copilul nu are note inca/ copilul nu are note la un curs dintr-o sala de clasa
+
+create or replace procedure ex9(nume student.last_name%type)
+as
+        type t_cursuri is table of course.course_name%type index by binary_integer;
+        type t_note is table of marks.mark_%type index by binary_integer;
+        
+        NO_DATA_FOUND_ exception;
+        NO_DATA_FOUND_2 exception;
+        TOO_MANY_ROWS_ exception;
+        cursuri t_cursuri;
+        note t_note;
+        nr number:=0;    
+        prenume student.first_name%type;
+begin
+        select count(*) into nr
+        from student
+        where last_name=nume;
+        
+        if nr=0 then raise NO_DATA_FOUND_;--nu exista studentul
+        end if;
+        if nr>1 then raise TOO_MANY_ROWS_;---mai multi cu acelasi nume
+        end if;
+        
+        nr:=0;
+        
+        select count(*) into nr 
+        from student s, catalog ca, marks m, course co, classroom cl
+        where s.student_id=ca.student_id 
+        and m.mark_id=ca.mark_id 
+        and co.course_id=ca.course_id 
+        and cl.classroom_id=co.classroom_id
+        and s.last_name=nume and cl.classroom_type like '%clasa';
+        
+        if nr=0 then raise NO_DATA_FOUND_2; ---Student gasit, dar nu are note la un astfel de curs
+        end if;
+        
+        select first_name into prenume
+        from student
+        where last_name=nume;
+        
+        DBMS_OUTPUT.PUT_LINE('Notele elevului '|| prenume||' '||nume||': ');
+        
+         select co.course_name, max(m.mark_)
+         bulk collect into cursuri, note
+        from student s, catalog ca, marks m, course co, classroom cl
+        where s.student_id=ca.student_id 
+        and m.mark_id=ca.mark_id 
+        and co.course_id=ca.course_id 
+        and cl.classroom_id=co.classroom_id
+        and s.last_name=nume and cl.classroom_type like '%clasa'
+        group by co.course_name;
+        
+        for i in cursuri.first..cursuri.last loop
+                DBMS_OUTPUT.PUT_LINE('           '||cursuri(i)|| ' : '|| note(i));
+        end loop;
+    EXCEPTION
+    WHEN NO_DATA_FOUND_ then 
+            DBMS_OUTPUT.PUT_LINE('Nu exista studentul');
+    WHEN TOO_MANY_ROWS_ then
+            DBMS_OUTPUT.PUT_LINE('Mai multi elevi cu acest nume');
+    WHEN NO_DATA_FOUND_2 then
+            DBMS_OUTPUT.PUT_LINE('Student gasit, dar nu are note la un astfel de curs');
+end;
+/
+select * from user_tables;
+
+
+ begin
+        ex9('Popescu'); --corect
+end;
+/
+begin
+        ex9('xxx'); --nu exista
+end;
+/
+begin
+        ex9('Ionescu'); -- mai multi cu acelasi nume
+end;
+/
+begin
+        ex9('Gaias'); --gasit dar nu are note la un astfel de curs
+end;
+/
+set serveroutput off;
+
+
+--10. Definiti un trigger de tip LMD la nivel de comandă. Declansati trigger-ul.
+--trigger care nu permite adaugarea/schimbarea unei note in afara orele de cursuri( 8:00-16:00)
+--sau a zilelor de cursuri(Sambata Duminica)
+
+CREATE OR REPLACE TRIGGER trigger10
+BEFORE INSERT OR DELETE OR UPDATE on marks
+BEGIN
+IF  (TO_CHAR(SYSDATE,'D') = 6) or (TO_CHAR(SYSDATE,'D') = 7)  or(TO_CHAR(SYSDATE,'HH24') NOT BETWEEN 8 AND 16)
+THEN
+RAISE_APPLICATION_ERROR(-20001,'Notele se pot adauga/sterge/modifica doar in timpul orelor de curs!');
+END IF;
+END;
+/
+INSERT INTO marks(mark_id, date_, mark_)
+VALUES (125, sysdate,10);
+
+--11. Definiti un trigger de tip LMD la nivel de linie. Declansati trigger-ul.
+--trigger care nu permite schimbarea tipului unei clase in amfiteatru daca capacitatea salii nu este cel putin 50
+CREATE OR REPLACE TRIGGER trigger11
+BEFORE UPDATE ON classroom 
+FOR EACH ROW
+BEGIN
+if(:NEW.classroom_type <> :OLD.classroom_type and :old.capacityy<50)then 
+RAISE_APPLICATION_ERROR (-20000, 'Nu puteti modifica descrierea unei sali de clasa cu mai putin de 50 de locuri intr-un amfiteatru!');
+end if;
+END;
+/
+UPDATE classroom
+SET classroom_type ='amfiteatru' --nu merge
+where classroom_id=80;
+
+UPDATE classroom
+SET classroom_type ='amfiteatru' --se modifica
+where classroom_id=84;
+select * from classroom;
+rollback;
+
+--12. Definiti un trigger de tip LDD. Declansati trigger-ul.
+--trigger care  salveaza modificari in audit_userr la comenzi de create,alter,drop
+
+CREATE TABLE audit_userr
+        (nume_bazadate VARCHAR2(50),
+        user_logat VARCHAR2(50),
+        eveniment VARCHAR2(50),
+        tip_obiect VARCHAR2(50),
+        nume_obiect VARCHAR2(50),
+        data date
+        );
+
+CREATE OR REPLACE TRIGGER ex12
+AFTER CREATE OR DROP OR ALTER ON SCHEMA
+BEGIN
+        INSERT INTO audit_userr
+        VALUES (SYS.DATABASE_NAME, SYS.LOGIN_USER,
+                        SYS.SYSEVENT, SYS.DICTIONARY_OBJ_TYPE,
+                        SYS.DICTIONARY_OBJ_NAME, sysdate);
+END;
+/
+CREATE TABLE  tip_nou_angajat(id_angajat number(3), 
+                                                                job_name varchar2(50), 
+                                                                job_description varchar2(200));
+drop table tip_nou_angajat;
+drop table audit_userr;
+drop trigger ex12;
+ALTER TABLE tip_nou_angajat ADD (coloana number(2));
+
+INSERT INTO tip_nou_angajat VALUES (1,'angajat_nou', 'responsabil de cladirea X',2);
+SELECT * FROM audit_userr;
